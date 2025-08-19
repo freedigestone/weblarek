@@ -1,6 +1,6 @@
 # Проектная работа "Веб-ларек"
 
-Стек: HTML, SCSS, TS, Webpack
+Стек: HTML, SCSS, TS, Vite
 
 Структура проекта:
 - src/ — исходные файлы проекта
@@ -97,4 +97,272 @@ Presenter - презентер содержит основную логику п
 `on<T extends object>(event: EventName, callback: (data: T) => void): void` - подписка на событие, принимает название события и функцию обработчик.  
 `emit<T extends object>(event: string, data?: T): void` - инициализация события. При вызове события в метод передается название события и объект с данными, который будет использован как аргумент для вызова обработчика.  
 `trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void` - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие с передачей в него данных из второго параметра.
+
+
+# Web-Larёk — Интернет-магазин для веб-разработчиков
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue) ![Webpack](https://img.shields.io/badge/Webpack-5.88-blue)
+
+---
+
+## Оглавление
+
+1. [Установка и запуск](#установка-и-запуск)
+2. [Описание проекта](#описание-проекта)
+3. [Скриншоты](#скриншоты)
+4. [Документация](#документация)
+   4.1 [Структура проекта](#структура-проекта)
+   4.2 [Архитектура приложения](#архитектура-приложения)
+   4.3 [Данные](#данные)
+   4.4 [Модели данных](#модели-данных)
+
+---
+
+## Установка и запуск
+
+```bash
+# с npm
+npm install
+npm run start
+
+# с yarn
+yarn
+yarn start
+```
+
+**Сборка проекта:**
+
+```bash
+# с npm
+npm run build
+
+# с yarn
+yarn build
+```
+
+---
+
+## Описание проекта
+
+«Web-Larёk» — интернет-магазин с товарами для веб-разработчиков.
+Пользователи могут:
+
+* Просматривать каталог товаров и детали каждого товара.
+* Добавлять товары в корзину.
+* Управлять корзиной и оформлять заказы.
+* Выбирать способ оплаты и отправлять заказ на сервер.
+
+Приложение обеспечивает удобный интерфейс с модальными окнами и полным циклом покупки.
+
+---
+
+## Скриншоты
+
+![Главная страница](./screenshots/home.png)
+![Карточка товара](./screenshots/product.png)
+![Корзина](./screenshots/cart.png)
+
+---
+
+## Документация
+
+### 4.1. Структура проекта
+
+```
+src/                — исходные файлы проекта
+├─ components/      — JS компоненты
+│  └─ base/         — базовый код компонентов
+├─ types/index.ts   — типы данных
+├─ main.ts          — точка входа приложения
+├─ scss/styles.scss — корневой файл стилей
+└─ utils/
+   ├─ constants.ts  — константы
+   └─ utils.ts      — утилиты
+index.html           — главная страница
+```
+
+### 4.2. Архитектура приложения
+
+Приложение построено с использованием **MVP-подхода** и событийного взаимодействия между слоями.
+
+### Классы и их роли
+
+| Класс                | Поля                                                       | Методы                                                                                                                         | Описание                                                       |
+| -------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| **Товар**            | `id`, `title`, `image`, `category`, `price`, `description` | —                                                                                                                              | Представляет отдельный товар интернет-магазина                 |
+| **КаталогНаГлавной** | Массив товаров, выбранная карточка                         | Список товаров(), Сохранить выбранную карточку(), Получить выбранную карточку(), Сохранить массив товаров()                    | Управляет списком товаров на главной странице и выбором товара |
+| **КорзинаСТоварами** | Массив товаров                                             | Добавлять товар(), Удалять товар(), Количество товаров(), Список товаров(), Сумма стоимости товаров(), Узнать наличие товара() | Управляет корзиной покупок                                     |
+| **Покупатель**       | `payment`, `address`, `email`, `phone`                     | Проверка данных(), Получение данных(), Сохранение данных()                                                                     | Управляет данными пользователя и оформлением заказа            |
+
+### Диаграмма классов (Mermaid)
+
+```mermaid
+classDiagram
+    class Товар {
+        +string id
+        +string title
+        +string image
+        +string category
+        +number price
+        +string description
+    }
+
+    class КаталогНаГлавной {
+        +Массив товаров
+        +Выбранная карточка
+        --
+        +Список товаров()
+        +Сохранить выбранную карточку()
+        +Получить выбранную карточку()
+        +Сохранить массив товаров()
+    }
+
+    class КорзинаСТоварами {
+        +Массив товаров
+        --
+        +Добавлять товар()
+        +Удалять товар()
+        +Количество товаров()
+        +Список товаров()
+        +Сумма стоимости товаров()
+        +Узнать наличие товара()
+    }
+
+    class Покупатель {
+        +string payment
+        +string address
+        +string email
+        +string phone
+        --
+        +Проверка данных()
+        +Получение данных()
+        +Сохранение данных()
+    }
+
+    КаталогНаГлавной --> Товар
+    КорзинаСТоварами --> Товар
+    Покупатель --> КорзинаСТоварами
+```
+
+### 4.3. Данные
+
+#### Интерфейсы данных
+
+**Товар**
+
+```ts
+interface IProduct {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  price: number | null;
+}
+```
+
+**Покупатель**
+
+```ts
+interface IBuyer {
+  payment: TPayment;
+  email: string;
+  phone: string;
+  address: string;
+}
+```
+
+### 4.4. Модели данных
+
+#### Каталог товаров (`Catalog`)
+
+**Конструктор:**
+
+```ts
+constructor(products: IProduct[] = [])
+```
+
+**Поля:** `products`, `selectedProduct`
+**Методы:** `setProducts`, `getProducts`, `getProductById`, `setSelectedProduct`, `getSelectedProduct`
+
+#### Корзина (`Cart`)
+
+**Конструктор:**
+
+```ts
+constructor(items: IProduct[] = [])
+```
+
+**Поля:** `items`
+**Методы:** `getItems`, `addItem`, `removeItem`, `clear`, `getTotalPrice`, `getCount`, `hasItem`
+
+#### Покупатель (`Buyer`)
+
+**Конструктор:**
+
+```ts
+constructor(data?: IBuyer)
+```
+
+**Поля:** `payment`, `email`, `phone`, `address`
+**Методы:** `setData`, `getData`, `clear`, `validate`
+
+### Диаграмма моделей данных (Mermaid)
+
+```mermaid
+classDiagram
+    class Catalog {
+        +products: IProduct[]
+        +selectedProduct: IProduct | null
+        --
+        +setProducts(products: IProduct[]): void
+        +getProducts(): IProduct[]
+        +getProductById(id: string): IProduct | undefined
+        +setSelectedProduct(product: IProduct): void
+        +getSelectedProduct(): IProduct | null
+    }
+
+    class Cart {
+        +items: IProduct[]
+        --
+        +getItems(): IProduct[]
+        +addItem(product: IProduct): void
+        +removeItem(product: IProduct): void
+        +clear(): void
+        +getTotalPrice(): number
+        +getCount(): number
+        +hasItem(id: string): boolean
+    }
+
+    class Buyer {
+        +payment: TPayment
+        +email: string
+        +phone: string
+        +address: string
+        --
+        +setData(data: IBuyer): void
+        +getData(): IBuyer
+        +clear(): void
+        +validate(): boolean
+    }
+
+    Catalog --> IProduct
+    Cart --> IProduct
+    Buyer --> Cart
+```
+
+### Примеры использования
+
+```ts
+// Подписка на событие
+eventEmitter.on('cart:added', (product) => {
+    console.log('Товар добавлен в корзину', product);
+});
+
+// Вызов API
+api.get('/products')
+   .then(products => console.log(products))
+   .catch(err => console.error(err));
+```
+
 
