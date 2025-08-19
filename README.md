@@ -119,6 +119,7 @@ Presenter - презентер содержит основную логику п
   * [Интерфейсы данных](#интерфейсы-данных)
   * [Модели данных](#модели-данных)
   * [Диаграмма моделей данных](#диаграмма-моделей-данных-mermaid)
+  * [Слой коммуникации](#слой-коммуникации)
   * [Примеры использования](#примеры-использования)
 
 ---
@@ -269,6 +270,15 @@ interface IBuyer {
 }
 ```
 
+**Объект для отправки заказа**
+
+```ts
+interface IOrder {
+  buyer: IBuyer;
+  items: IProduct[];
+}
+```
+
 ### Модели данных
 
 #### Каталог товаров Catalog
@@ -348,6 +358,42 @@ classDiagram
     Buyer --> Cart
 ```
 
+### Слой коммуникации
+
+**Класс Communication** — отвечает за получение данных с сервера и отправку данных заказа.
+
+**Конструктор:**
+
+```ts
+constructor(api: Api)
+```
+
+**Поля:** `api: Api`
+
+**Методы:**
+
+```ts
+// Получение всех товаров
+getProducts(): Promise<IProduct[]>;
+
+// Отправка заказа
+sendOrder(order: IOrder): Promise<object>;
+```
+
+**Пример использования:**
+
+```ts
+const communication = new Communication(api);
+communication.getProducts()
+  .then(products => catalog.setProducts(products))
+  .catch(err => console.error(err));
+
+const order: IOrder = { buyer: buyer.getData(), items: cart.getItems() };
+communication.sendOrder(order)
+  .then(response => console.log('Заказ отправлен', response))
+  .catch(err => console.error(err));
+```
+
 ### Примеры использования
 
 ```ts
@@ -356,9 +402,8 @@ eventEmitter.on('cart:added', (product) => {
     console.log('Товар добавлен в корзину', product);
 });
 
-// Вызов API
-api.get('/products')
+// Вызов API через Communication
+communication.getProducts()
    .then(products => console.log(products))
    .catch(err => console.error(err));
 ```
-
