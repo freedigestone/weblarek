@@ -101,7 +101,7 @@ Presenter - презентер содержит основную логику п
 
 # Web-Larёk — Интернет-магазин для веб-разработчиков
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue) ![Webpack](https://img.shields.io/badge/Webpack-5.88-blue)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue) ![Vite](https://img.shields.io/badge/Vite-4.5-purple)
 
 ---
 
@@ -123,20 +123,12 @@ Presenter - презентер содержит основную логику п
 ```bash
 # с npm
 npm install
-npm run start
+npm run dev       # запуск dev-сервера Vite
+npm run build     # сборка проекта
 
 # с yarn
 yarn
-yarn start
-```
-
-**Сборка проекта:**
-
-```bash
-# с npm
-npm run build
-
-# с yarn
+yarn dev
 yarn build
 ```
 
@@ -364,5 +356,3 @@ api.get('/products')
    .then(products => console.log(products))
    .catch(err => console.error(err));
 ```
-
-
