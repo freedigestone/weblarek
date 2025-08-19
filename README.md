@@ -343,8 +343,15 @@ classDiagram
         +address: string
     }
 
+    class Communication {
+        +api: Api
+        +getProducts()
+        +sendOrder(order: IOrder)
+    }
+
     Catalog --> IProduct
     Cart --> IProduct
+    Communication --> Buyer
 ```
 
 ### Слой коммуникации
@@ -362,10 +369,7 @@ constructor(api: Api)
 **Методы:**
 
 ```ts
-// Получение всех товаров
 getProducts(): Promise<IProduct[]>;
-
-// Отправка заказа
 sendOrder(order: IOrder): Promise<object>;
 ```
 
