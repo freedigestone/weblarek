@@ -318,27 +318,22 @@ constructor(data?: IBuyer)
 
 ```mermaid
 classDiagram
+    class IProduct {
+        +id: string
+        +title: string
+        +description: string
+        +image: string
+        +category: string
+        +price: number | null
+    }
+
     class Catalog {
         +products: IProduct[]
         +selectedProduct: IProduct | null
-        --
-        +setProducts(products: IProduct[]): void
-        +getProducts(): IProduct[]
-        +getProductById(id: string): IProduct | undefined
-        +setSelectedProduct(product: IProduct): void
-        +getSelectedProduct(): IProduct | null
     }
 
     class Cart {
         +items: IProduct[]
-        --
-        +getItems(): IProduct[]
-        +addItem(product: IProduct): void
-        +removeItem(product: IProduct): void
-        +clear(): void
-        +getTotalPrice(): number
-        +getCount(): number
-        +hasItem(id: string): boolean
     }
 
     class Buyer {
@@ -346,16 +341,10 @@ classDiagram
         +email: string
         +phone: string
         +address: string
-        --
-        +setData(data: IBuyer): void
-        +getData(): IBuyer
-        +clear(): void
-        +validate(): boolean
     }
 
     Catalog --> IProduct
     Cart --> IProduct
-    Buyer --> Cart
 ```
 
 ### Слой коммуникации
