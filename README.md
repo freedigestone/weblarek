@@ -159,6 +159,8 @@ yarn build
 ![Главная страница](./screenshots/home.png)
 ![Карточка товара](./screenshots/product.png)
 ![Корзина](./screenshots/cart.png)
+![Оформление заказа 1 шаг](./screenshots/order_step_1.png)
+![Оформление заказа 2 шаг](./screenshots/order_step_2.png)
 
 ---
 
