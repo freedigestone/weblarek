@@ -155,23 +155,25 @@ yarn build
 ---
 
 ## Скриншоты
+
 **UI-Kit**  
-![UI-Kit — набор компонентов интерфейса](./screenshots/ui-kit.png)
+<img src="./screenshots/ui-kit.png" alt="UI-Kit — набор компонентов интерфейса" width="500"/>
 
 **Главная страница**  
-![Главная страница магазина](./screenshots/home.png)
+<img src="./screenshots/home.png" alt="Главная страница магазина" width="500"/>
 
 **Карточка товара**  
-![Карточка товара с описанием и кнопкой "Добавить в корзину"](./screenshots/product.png)
+<img src="./screenshots/product.png" alt="Карточка товара с описанием и кнопкой 'Добавить в корзину'" width="500"/>
 
 **Корзина**  
-![Корзина с выбранными товарами](./screenshots/cart.png)
+<img src="./screenshots/cart.png" alt="Корзина с выбранными товарами" width="500"/>
 
 **Оформление заказа — шаг 1**  
-![Форма оформления заказа: ввод контактных данных](./screenshots/order_step_1.png)
+<img src="./screenshots/order_step_1.png" alt="Форма оформления заказа: выбор способа оплаты" width="500"/>
 
 **Оформление заказа — шаг 2**  
-![Форма оформления заказа: выбор способа оплаты](./screenshots/order_step_2.png)
+<img src="./screenshots/order_step_2.png" alt="Форма оформления заказа: ввод контактных данных " width="500"/>
+
 
 ---
 
