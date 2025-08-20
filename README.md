@@ -1,6 +1,6 @@
 # Web-Larёk — Интернет-магазин для веб-разработчиков
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue) ![Vite](https://img.shields.io/badge/Vite-4.5-purple)
+![Build Status](https://img.shields.io/badge/build-Planned-red) ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue) ![Vite](https://img.shields.io/badge/Vite-7.1.0-purple)
 
 ---
 
