@@ -155,7 +155,7 @@ yarn build
 ---
 
 ## Скриншоты
-![UI-Kit](./screenshots/ui-kit.png)
+*[UI-Kit](./screenshots/ui-kit.png)
 ![Главная страница](./screenshots/home.png)
 ![Карточка товара](./screenshots/product.png)
 ![Корзина](./screenshots/cart.png)
