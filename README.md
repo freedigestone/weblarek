@@ -155,11 +155,22 @@ yarn build
 ---
 
 ## Скриншоты
-UI-Kit ![UI-Kit](./screenshots/ui-kit.png)
+UI-Kit 
+![UI-Kit](./screenshots/ui-kit.png)
+
+Главная страница
 ![Главная страница](./screenshots/home.png)
+
+Карточка товара
 ![Карточка товара](./screenshots/product.png)
+
+Корзина
 ![Корзина](./screenshots/cart.png)
+
+Оформление заказа 1 шаг
 ![Оформление заказа 1 шаг](./screenshots/order_step_1.png)
+
+Оформление заказа 2 шаг
 ![Оформление заказа 2 шаг](./screenshots/order_step_2.png)
 
 ---
