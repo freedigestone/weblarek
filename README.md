@@ -285,14 +285,7 @@ classDiagram
 constructor(api: Api)
 ```
 
-**Поля:** `api: Api`
-
-**Методы:**
-
-```ts
-getProducts(): Promise<IProduct[]>;
-sendOrder(order: IOrder): Promise<object>;
-```
+**Поля:** `api: Api` **Методы:** `getProducts`, `sendOrder`
 
 **Пример использования:**
 
