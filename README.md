@@ -285,7 +285,7 @@ classDiagram
 constructor(api: Api)
 ```
 
-**Поля:** `api: Api` **Методы:** `getProducts`, `sendOrder`
+**Поля:** `api` **Методы:** `getProducts`, `sendOrder`
 
 **Пример использования:**
 
