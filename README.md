@@ -21,6 +21,7 @@
   * [Диаграмма моделей данных](#диаграмма-моделей-данных-mermaid)
   * [Слой коммуникации](#слой-коммуникации)
   * [Примеры использования](#примеры-использования)
+  * [Автономность моделей данных](#автономность-моделей-данных)
 
 ---
 
@@ -362,3 +363,40 @@ communication.getProducts()
    .then(products => console.log(products))
    .catch(err => console.error(err));
 ```
+
+
+### Автономность моделей данных
+
+```mermaid
+flowchart TB
+    subgraph Models [Модели данных]
+        Catalog["Catalog - Товары"]
+        Cart["Cart - Корзина"]
+        Buyer["Buyer - Покупатель"]
+    end
+
+    subgraph UI [Интерфейс / Вёрстка]
+        View["View / Components"]
+    end
+
+    subgraph Communication [Слой коммуникации]
+        API["API / Communication"]
+    end
+
+    %% Взаимодействия
+    View -->|использует методы| Catalog
+    View -->|использует методы| Cart
+    View -->|использует методы| Buyer
+
+    API -->|получает данные и передаёт| Catalog
+    API -->|получает данные и передаёт| Cart
+    API -->|получает данные и передаёт| Buyer
+
+    %% Модели данных автономны
+    Catalog -.->|не зависит от| View
+    Cart -.->|не зависит от| View
+    Buyer -.->|не зависит от| View
+
+    Catalog -.->|не зависит от| API
+    Cart -.->|не зависит от| API
+    Buyer -.->|не зависит от| API
