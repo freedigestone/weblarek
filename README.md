@@ -88,16 +88,40 @@ yarn build
 ### Структура проекта
 
 ```
-src/                — исходные файлы проекта
-├─ components/      — JS компоненты
-│  └─ base/         — базовый код компонентов
-├─ types/index.ts   — типы данных
-├─ main.ts          — точка входа приложения
+src/ — исходные файлы проекта
+├─ components/ — JS/TS компоненты приложения
+│ ├─ base/ — базовый код
+│ │ ├─ Api.ts — класс для работы с API
+│ │ └─ Events.ts — событийный шина (event emitter)
+│ │
+│ ├─ Models/ — модели данных
+│ │ ├─ Buyer.ts — модель покупателя
+│ │ ├─ Cart.ts — модель корзины
+│ │ ├─ Catalog.ts — модель каталога
+│ │ └─ Communication.ts — работа с API через класс Api
+│ │
+│ ├─ Views/ — слой отображения (UI)
+│ │ ├─ CardView.ts — карточка товара в каталоге
+│ │ ├─ CatalogView.ts — список карточек
+│ │ ├─ CartView.ts — корзина и её элементы
+│ │ ├─ ContactsFormView.ts — форма ввода email и телефона
+│ │ ├─ OrderFormView.ts — форма выбора оплаты и адреса
+│ │ ├─ ProductPreviewView.ts — превью карточки в модалке
+│ │ ├─ ModalView.ts — универсальное модальное окно
+│ │ └─ SuccessView.ts — окно успешного оформления заказа
+│ │
+│ └─ Presenter/ — связывает слои (MVP)
+│ └─ AppPresenter.ts — главный презентер, инициализация событий
+│
+├─ types/index.ts — глобальные типы данных (IProduct, IBuyer, IOrder и т.д.)
+├─ utils/
+│ ├─ constants.ts — константы (карта категорий, API_URL)
+│ ├─ dom.ts — утилита cloneTemplate()
+│ └─ utils.ts — утилиты (например, resolveImagePath)
+│
 ├─ scss/styles.scss — корневой файл стилей
-└─ utils/
-   ├─ constants.ts  — константы
-   └─ utils.ts      — утилиты
-index.html           — главная страница
+├─ main.ts — точка входа приложения
+└─ index.html — главная страница
 ```
 
 ### Архитектура приложения
