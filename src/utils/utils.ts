@@ -161,3 +161,14 @@ export function resolveImagePath(path: string): string {
   const file = path.replace(/^\//, '').replace(/\.svg(\?.*)?$/, '.png$1');
   return `${API_ORIGIN.replace(/\/$/, '')}/content/weblarek/${file}`;
 }
+
+export enum EventNames {
+  CardSelect = 'card:select',
+  CartAdd = 'cart:add',
+  CartRemove = 'cart:remove',
+  CartRemoveById = 'cart:remove-by-id',
+  CartOrder = 'cart:order',
+  OrderNext = 'order:next',
+  OrderConfirm = 'order:confirm',
+  SuccessClose = 'success:close',
+}

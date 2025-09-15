@@ -1,3 +1,4 @@
+import { Buyer } from '../components/Models/Buyer';
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 export type TPayment = 'card' | 'cash'; 
 
@@ -6,7 +7,7 @@ export interface IApi {
     post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
 }
 
-// Виды оплаты
+
 
 export interface IProduct {
   id: string;       // уникальный идентификатор товара
@@ -31,4 +32,26 @@ export interface IOrder {
   email: string;
   phone: string;
   total: number;
+}
+
+export interface CardSelectPayload {
+  id: string;
+}
+
+export interface CartRemovePayload {
+  index: number;
+}
+
+export interface CartRemoveByIdPayload {
+  id: string;
+}
+
+export interface OrderNextPayload {
+  payment: Buyer['payment'];
+  address: string;
+}
+
+export interface OrderConfirmPayload {
+  email: string;
+  phone: string;
 }

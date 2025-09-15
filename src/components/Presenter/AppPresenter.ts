@@ -10,14 +10,16 @@ import { API_URL, categoryMap } from "../../utils/constants";
 import { ModalView } from '../Views/ModalView';
 import { ProductPreviewView } from '../Views/ProductPreviewView';
 import { CatalogView } from '../Views/CatalogView';
-import { CartView, CartItemData } from '../Views/CartView';
+import { CartView } from '../Views/CartView';
 import { OrderFormView } from '../Views/OrderFormView';
 import { ContactsFormView } from '../Views/ContactsFormView';
 import { SuccessView } from '../Views/SuccessView';
 
-import { IProduct } from '../../types';
-import { CardViewData } from '../Views/CardView';
+import { IProduct, OrderNextPayload } from '../../types';
 import { events } from '../base/Events';
+import { BasketCounterView } from '../Views/BasketCounterView';
+import { EventNames } from '../../utils/utils';
+import { toCardViewData, toCartItemData } from '../../utils/mappers';
 
 export class AppPresenter {
   private catalog = new Catalog();
@@ -35,25 +37,6 @@ export class AppPresenter {
   private normalizeCategory(raw: string): string {
     return categoryMap[raw]?.mod || 'other';
   }
-
-  private toCardViewData(products: IProduct[]): CardViewData[] {
-    return products.map((p) => ({
-      id: p.id,
-      title: p.title,
-      price: p.price ?? null,
-      category: this.normalizeCategory(p.category),
-      image: p.image,
-    }));
-  }
-
-  private toCartItemData(items: IProduct[]): CartItemData[] {
-    return items.map((p) => ({
-      id: p.id,
-      title: p.title,
-      price: p.price ?? 0,
-    }));
-  }
-
   // ==== Инициализация ====
   public init() {
     this.loadProducts();
@@ -66,7 +49,8 @@ export class AppPresenter {
     try {
       const productlist = await this.communication.getProductList();
       this.catalog.setProducts(productlist);
-      this.catalogView.render(this.toCardViewData(productlist));
+      this.catalogView.render(toCardViewData(productlist));
+      this.catalogView.render(toCardViewData(productlist));
     } catch (err) {
       console.error('Ошибка загрузки каталога:', err);
     }
@@ -85,6 +69,7 @@ export class AppPresenter {
       };
 
       const previewView = new ProductPreviewView();
+      previewView.setCartChecker((pid) => this.cart.hasItem(pid));
       const inCart = this.cart.hasItem(product.id);
       this.modal.open(previewView.render(normalizedProduct, inCart));
     });
@@ -100,9 +85,9 @@ export class AppPresenter {
     // добавить товар
    events.on<IProduct>('cart:add', (product) => {
     this.cart.addItem(product);
-    this.cartView.render(this.toCartItemData(this.cart.getItems()));
+   this.cartView.render(toCartItemData(this.cart.getItems()));
     this.updateBasketCounter();
-    
+    events.emit('cart:changed');
   });
 
 // удалить товар (по индексу)
@@ -113,15 +98,17 @@ export class AppPresenter {
     this.cart.clear();
     items.forEach(item => this.cart.addItem(item));
 
-    this.cartView.render(this.toCartItemData(this.cart.getItems()));
+    this.cartView.render(toCartItemData(this.cart.getItems()));
     this.updateBasketCounter();
+    events.emit('cart:changed');
   });
 
   // удалить товар (по id) — для кнопки в превью
 events.on<{ id: string }>('cart:remove-by-id', ({ id }) => {
   this.cart.removeItem({ id } as any);
-  this.cartView.render(this.toCartItemData(this.cart.getItems()));
+  this.cartView.render(toCartItemData(this.cart.getItems()));
   this.updateBasketCounter();
+  events.emit('cart:changed');
 });
 
     // оформить заказ (шаг 1)
@@ -131,12 +118,11 @@ events.on<{ id: string }>('cart:remove-by-id', ({ id }) => {
   });
 
   // шаг 1 → шаг 2
-  events.on<{ payment: Buyer['payment']; address: string }>('order:next', ({ payment, address }) => {
-    this.buyer.setData({ payment, address });
-
-    const contactsForm = new ContactsFormView();
-    this.modal.open(contactsForm.getElement());
-  });
+  events.on<OrderNextPayload>(EventNames.OrderNext, ({ payment, address }) => {
+  this.buyer.setData({ payment, address });
+  const contactsForm = new ContactsFormView();
+  this.modal.open(contactsForm.getElement());
+});
 
     // шаг 2 → подтверждение
   events.on<{ email: string; phone: string }>('order:confirm', async ({ email, phone }) => {
@@ -168,11 +154,8 @@ events.on<{ id: string }>('cart:remove-by-id', ({ id }) => {
   }
 
   // ==== Счётчик корзины ====
-  private updateBasketCounter() {
-    const counter = document.querySelector<HTMLElement>('.header__basket-counter');
-    if (!counter) return;
-    const count = this.cart.getCount();
-    counter.textContent = String(count);
-    counter.style.display = 'flex'; 
-  }
+ private basketCounter = new BasketCounterView();
+ private updateBasketCounter() {
+  this.basketCounter.update(this.cart.getCount());
+}
 }
