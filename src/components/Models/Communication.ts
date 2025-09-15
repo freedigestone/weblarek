@@ -1,9 +1,15 @@
+// src/components/Models/Communication.ts
 import { Api } from '../base/Api';
-import { IProduct, IOrder } from '../../types/index';
-import { API_URL } from '../../utils/constants'; // <-- путь из constants.ts
+import { IProduct, IOrder } from '../../types';
 
 interface IApiProductsResponse {
   items: IProduct[];
+  total?: number;
+}
+
+interface IApiOrderResponse {
+  total: number;   // сервер возвращает сумму списания
+  id?: string;     // иногда ещё приходит id заказа
 }
 
 export class Communication {
@@ -16,9 +22,9 @@ export class Communication {
   /** Получение массива товаров с сервера */
   async getProductList(): Promise<IProduct[]> {
     try {
-      // собираем полный URL для запроса
-      const response = await this.api.get<IApiProductsResponse>(`/product/`);
-      return response.items || [];
+      // путь относительный, т.к. baseURL уже есть внутри Api
+      const response = await this.api.get<IApiProductsResponse>('/product/');
+      return response.items ?? [];
     } catch (error) {
       console.error('Ошибка при получении товаров:', error);
       return [];
@@ -26,12 +32,14 @@ export class Communication {
   }
 
   /** Отправка данных заказа на сервер */
-  async sendOrder(order: IOrder): Promise<object> {
+  async sendOrder(order: IOrder): Promise<IApiOrderResponse> {
     try {
-      return await this.api.post(`${API_URL}/order/`, order);
+      // тоже относительный путь
+      return await this.api.post<IApiOrderResponse>('/order/', order);
     } catch (error) {
       console.error('Ошибка при отправке заказа:', error);
-      return {};
+      // возвращаем безопасный дефолт, чтобы не упал рендер Success
+      return { total: 0 };
     }
   }
 }

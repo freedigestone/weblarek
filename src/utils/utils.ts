@@ -1,3 +1,4 @@
+import { API_ORIGIN } from './constants';
 export function pascalToKebab(value: string): string {
     return value.replace(/([a-z0–9])([A-Z])/g, "$1-$2").toLowerCase();
 }
@@ -134,4 +135,29 @@ export function createElement<
         }
     }
     return element;
+}
+export function resolveImagePath(path: string): string {
+  if (!path) return '';
+
+  // 1) Абсолютный URL — нормализуем старый /api/... → /content/... и svg → png
+  if (/^https?:\/\//.test(path)) {
+    return path
+      .replace('/api/weblarek/', '/content/weblarek/')
+      .replace(/\.svg(\?.*)?$/, '.png$1');
+  }
+
+  // 2) Уже правильный относительный путь к контенту
+  if (path.startsWith('/content/weblarek/')) {
+    return `${API_ORIGIN.replace(/\/$/, '')}${path}`;
+  }
+
+  // 3) Относительный старый api-путь → переводим в content + png
+  if (path.startsWith('/api/weblarek/')) {
+    const file = path.replace('/api/weblarek/', '').replace(/\.svg(\?.*)?$/, '.png$1');
+    return `${API_ORIGIN.replace(/\/$/, '')}/content/weblarek/${file}`;
+  }
+
+  // 4) Любой другой относительный путь (например "/5_Dots.svg" или "Leaf.svg")
+  const file = path.replace(/^\//, '').replace(/\.svg(\?.*)?$/, '.png$1');
+  return `${API_ORIGIN.replace(/\/$/, '')}/content/weblarek/${file}`;
 }

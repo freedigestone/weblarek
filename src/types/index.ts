@@ -25,6 +25,10 @@ export interface IBuyer {
 }
 
 export interface IOrder {
-  buyer: IBuyer;     // данные покупателя
-  items: IProduct[]; // список выбранных товаров
+  items: string[]; // список id товаров
+  payment: 'card' | 'cash';
+  address: string;
+  email: string;
+  phone: string;
+  total: number;
 }
